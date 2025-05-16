@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 class ClothingItem(models.Model):
     CATEGORY_CHOICES = [
@@ -47,3 +48,13 @@ class ItemImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.item.title}"
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=now)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification for {self.user.username}: {self.message}"

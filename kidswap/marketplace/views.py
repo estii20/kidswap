@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import ClothingItem, ItemImage
+from .models import ClothingItem, ItemImage, Notification
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden
+from .utils import notify_user
 
 
 def home(request):
@@ -85,8 +86,8 @@ def remove_from_cart(request, item_id):
     return redirect('view_cart')
 
 
-@csrf_exempt
 @login_required
+@csrf_exempt
 def checkout(request):
     cart_items = CartItem.objects.filter(user=request.user)
     # Here is where you'd integrate Stripe
@@ -95,7 +96,15 @@ def checkout(request):
         item = cart_item.item
         item.sold = True
         item.save()
+
+        # Notify seller
+        notify_user(item.seller, f"Your item '{item.title}' has been sold!")
+
+        # Notify buyer (current user)
+        notify_user(request.user, f"You bought '{item.title}' successfully!")
+
         cart_item.delete()
+
     return render(request, 'marketplace/checkout_success.html')
 
 
@@ -178,3 +187,11 @@ def delete_item(request, item_id):
         return redirect('profile')
 
     return render(request, 'marketplace/delete_item.html', {'item': item})
+
+
+@login_required
+def mark_notification_read(request, notification_id):
+    note = get_object_or_404(Notification, id=notification_id, user=request.user)
+    note.is_read = True
+    note.save()
+    return redirect('profile')
