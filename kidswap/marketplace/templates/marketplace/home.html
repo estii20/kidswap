@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kids Closet</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a> | 
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+
+    <h1>Available Items</h1>
+    {% for item in items %}
+        <div>
+            <h3>{{ item.title }}</h3>
+            <img src="{{ item.image.url }}" width="150" />
+            <p>{{ item.description }}</p>
+            <p>Size: {{ item.size }}</p>
+            <p>Price: ${{ item.price }}</p>
+        </div>
+        <hr>
+    {% empty %}
+        <p>No items available.</p>
+    {% endfor %}
+</body>
+</html>
