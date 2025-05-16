@@ -1,3 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+{% block title %}
+
 <h2>Edit Item: {{ item.title }}</h2>
 
 <form method="POST" enctype="multipart/form-data">
@@ -11,3 +21,6 @@
 </form>
 
 <a href="{% url 'item_detail' item.id %}">Cancel</a>
+
+{% static %}
+{% endblock %}

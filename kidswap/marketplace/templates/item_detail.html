@@ -1,3 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+{% block title %}
+
 <h2>{{ item.title }}</h2>
 <p><strong>Category:</strong> {{ item.get_category_display }}</p>
 <p><strong>Condition:</strong> {{ item.get_condition_display }}</p>
@@ -29,3 +39,6 @@
 {% endif %}
 
 <a href="{% url 'home' %}">Back to Home</a>
+
+{% static %}
+{% endblock %}

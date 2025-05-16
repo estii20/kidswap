@@ -1,3 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+{% block title %}
 <h2>Sell an Item</h2>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
@@ -9,3 +18,5 @@
     <button type="submit">List Item</button>
 </form>
 
+{% static %}
+{% endblock %}

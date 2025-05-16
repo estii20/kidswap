@@ -1,7 +1,33 @@
-<h2>Login</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log In</button>
-</form>
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+{% block title %}
 <a href="{% url 'register' %}">Don't have an account? Register</a>
+{% extends 'base.html' %}
+{% block content %}
+    <!-- Hero Section -->
+    <section id="hero" class="h-[600px] bg-white">
+        <div class="container mx-auto px-4 flex flex-wrap items-center">
+            <div class="w-full lg:w-1/2 py-12">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Buy & Sell Quality Kids Clothing</h1>
+                <p class="text-gray-600 text-lg mb-8">Join our community of parents who save money and help the environment by giving pre-loved clothes a second life.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700">Start Shopping</a>
+                    <a href="#" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-full hover:bg-gray-300">Sell Items</a>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2">
+                <img class="rounded-2xl" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/df06d399be-b27bbd6c5e84e793f572.png" alt="happy children playing and wearing colorful clothes" >
+            </div>
+        </div>
+    </section>
+
+    <!-- You can continue adding other sections (categories, featured, how it works, etc.) here or in separate includes -->
+{% static %}
+{% endblock %}

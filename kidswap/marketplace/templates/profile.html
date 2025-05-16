@@ -1,3 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+
+{% block title %}
+
 <h2>My Profile</h2>
 
 <h3>Items I'm Selling</h3>
@@ -26,3 +36,6 @@
 {% empty %}
     <p>You haven't purchased anything yet.</p>
 {% endfor %}
+
+{% static %}
+{% endblock %}
