@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
+
 class ClothingItem(models.Model):
     CATEGORY_CHOICES = [
         ('tops', 'Tops'),
@@ -10,7 +11,7 @@ class ClothingItem(models.Model):
         ('outerwear', 'Outerwear'),
         ('accessories', 'Accessories'),
     ]
-    
+
     CONDITION_CHOICES = [
         ('new', 'New with tags'),
         ('like_new', 'Like New'),
@@ -28,6 +29,7 @@ class ClothingItem(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     posted_at = models.DateTimeField(auto_now_add=True)
     sold = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

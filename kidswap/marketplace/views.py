@@ -26,11 +26,14 @@ def home(request):
     if category:
         items = items.filter(category=category)
 
+    featured_products = ClothingItem.objects.filter(is_featured=True, sold=False).order_by('-posted_at')[:8]
+
     return render(request, 'marketplace/home.html', {
         'items': items,
         'query': query,
         'size': size,
         'category': category,
+        'featured_products': featured_products,
     })
 
 
