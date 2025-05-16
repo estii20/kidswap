@@ -13,6 +13,9 @@
     {% if user.is_authenticated %}
     <a href="{% url 'add_item' %}">Sell an Item</a> |
     {% endif %}
+    {% if user.is_authenticated %}
+    <a href="{% url 'profile' %}">My Profile</a> |
+    {% endif %}
 
     <form method="get">
     <input type="text" name="q" placeholder="Search..." value="{{ query }}">

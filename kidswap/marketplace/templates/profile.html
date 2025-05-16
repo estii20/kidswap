@@ -1,0 +1,28 @@
+<h2>My Profile</h2>
+
+<h3>Items I'm Selling</h3>
+{% for item in unsold_items %}
+    <div>
+        <strong>{{ item.title }}</strong> - ${{ item.price }}
+    </div>
+{% empty %}
+    <p>You haven't listed anything yet.</p>
+{% endfor %}
+
+<h3>Items I've Sold</h3>
+{% for item in sold_items %}
+    <div>
+        {{ item.title }} - ${{ item.price }}
+    </div>
+{% empty %}
+    <p>No items sold yet.</p>
+{% endfor %}
+
+<h3>Items I've Purchased</h3>
+{% for item in purchased_items %}
+    <div>
+        {{ item.title }} - ${{ item.price }}
+    </div>
+{% empty %}
+    <p>You haven't purchased anything yet.</p>
+{% endfor %}

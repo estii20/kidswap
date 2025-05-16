@@ -95,3 +95,21 @@ def checkout(request):
         item.save()
         cart_item.delete()
     return render(request, 'marketplace/checkout_success.html')
+
+
+@login_required
+def profile(request):
+    listed_items = ClothingItem.objects.filter(seller=request.user).order_by('-posted_at')
+    sold_items = listed_items.filter(sold=True)
+    unsold_items = listed_items.filter(sold=False)
+
+    purchased_items = ClothingItem.objects.filter(
+        sold=True,
+        cartitem__user=request.user
+    ).distinct()  # If you want to show what they bought
+
+    return render(request, 'marketplace/profile.html', {
+        'unsold_items': unsold_items,
+        'sold_items': sold_items,
+        'purchased_items': purchased_items,
+    })
