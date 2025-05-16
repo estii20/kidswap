@@ -40,3 +40,10 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.item.title} in {self.user.username}'s cart"
 
+
+class ItemImage(models.Model):
+    item = models.ForeignKey(ClothingItem, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='item_images/')
+
+    def __str__(self):
+        return f"Image for {self.item.title}"

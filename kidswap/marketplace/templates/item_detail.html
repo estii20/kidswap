@@ -1,0 +1,31 @@
+<h2>{{ item.title }}</h2>
+<p><strong>Category:</strong> {{ item.get_category_display }}</p>
+<p><strong>Condition:</strong> {{ item.get_condition_display }}</p>
+<p><strong>Size:</strong> {{ item.size }}</p>
+<p><strong>Price:</strong> ${{ item.price }}</p>
+<p><strong>Description:</strong></p>
+<p>{{ item.description }}</p>
+
+<h3>Images</h3>
+{% for image in item.images.all %}
+    <img src="{{ image.image.url }}" alt="{{ item.title }}" style="max-width: 300px; margin: 5px;">
+{% empty %}
+    <p>No images available.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+    <form action="{% url 'add_to_cart' item.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Add to Cart</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to buy this item.</p>
+{% endif %}
+{% if user == item.seller %}
+    <p>
+        <a href="{% url 'edit_item' item.id %}">Edit</a> |
+        <a href="{% url 'delete_item' item.id %}">Delete</a>
+    </p>
+{% endif %}
+
+<a href="{% url 'home' %}">Back to Home</a>

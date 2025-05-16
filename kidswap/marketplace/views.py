@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import ClothingItem
+from .models import ClothingItem, ItemImage
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -7,6 +7,8 @@ from .forms import ClothingItemForm
 from .models import CartItem
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseForbidden
 
 
 def home(request):
@@ -113,3 +115,66 @@ def profile(request):
         'sold_items': sold_items,
         'purchased_items': purchased_items,
     })
+
+
+@login_required
+def add_item(request):
+    if request.method == 'POST':
+        form = ClothingItemForm(request.POST, request.FILES)
+        images = request.FILES.getlist('images')
+
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.seller = request.user
+            item.save()
+
+            for image in images:
+                ItemImage.objects.create(item=item, image=image)
+
+            return redirect('home')
+    else:
+        form = ClothingItemForm()
+    return render(request, 'marketplace/add_item.html', {'form': form})
+
+
+def item_detail(request, item_id):
+    item = get_object_or_404(ClothingItem, id=item_id)
+    return render(request, 'marketplace/item_detail.html', {'item': item})
+
+
+@login_required
+def edit_item(request, item_id):
+    item = get_object_or_404(ClothingItem, id=item_id)
+
+    if item.seller != request.user:
+        return HttpResponseForbidden("You are not allowed to edit this item.")
+
+    if request.method == 'POST':
+        form = ClothingItemForm(request.POST, request.FILES, instance=item)
+        images = request.FILES.getlist('images')
+        if form.is_valid():
+            form.save()
+            # Add new images if uploaded
+            for image in images:
+                ItemImage.objects.create(item=item, image=image)
+            messages.success(request, "Item updated successfully.")
+            return redirect('item_detail', item_id=item.id)
+    else:
+        form = ClothingItemForm(instance=item)
+
+    return render(request, 'marketplace/edit_item.html', {'form': form, 'item': item})
+
+
+@login_required
+def delete_item(request, item_id):
+    item = get_object_or_404(ClothingItem, id=item_id)
+
+    if item.seller != request.user:
+        return HttpResponseForbidden("You are not allowed to delete this item.")
+
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, "Item deleted successfully.")
+        return redirect('profile')
+
+    return render(request, 'marketplace/delete_item.html', {'item': item})
