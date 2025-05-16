@@ -1,0 +1,7 @@
+<h2>Sell an Item</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">List Item</button>
+</form>
+<a href="{% url 'home' %}">Back to Home</a>

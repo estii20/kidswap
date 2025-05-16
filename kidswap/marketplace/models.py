@@ -31,3 +31,12 @@ class ClothingItem(models.Model):
     def __str__(self):
         return self.title
 
+
+class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(ClothingItem, on_delete=models.CASCADE)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.item.title} in {self.user.username}'s cart"
+

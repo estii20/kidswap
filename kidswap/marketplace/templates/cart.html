@@ -1,0 +1,17 @@
+<h2>Your Cart</h2>
+{% for item in cart_items %}
+    <div>
+        <p>{{ item.item.title }} - ${{ item.item.price }}</p>
+        <a href="{% url 'remove_from_cart' item.item.id %}">Remove</a>
+    </div>
+{% empty %}
+    <p>Your cart is empty.</p>
+{% endfor %}
+<p>Total: ${{ total }}</p>
+
+{% if cart_items %}
+    <form action="{% url 'checkout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Proceed to Checkout</button>
+    </form>
+{% endif %}

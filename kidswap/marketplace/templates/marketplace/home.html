@@ -10,6 +10,43 @@
         <a href="{% url 'login' %}">Login</a> | 
         <a href="{% url 'register' %}">Register</a>
     {% endif %}
+    {% if user.is_authenticated %}
+    <a href="{% url 'add_item' %}">Sell an Item</a> |
+    {% endif %}
+
+    <form method="get">
+    <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+    
+    <select name="size">
+        <option value="">Any Size</option>
+        <option value="3-6M" {% if size == "3-6M" %}selected{% endif %}>3-6M</option>
+        <option value="6-12M" {% if size == "6-12M" %}selected{% endif %}>6-12M</option>
+        <option value="1-2Y" {% if size == "1-2Y" %}selected{% endif %}>1-2Y</option>
+        <option value="2-3Y" {% if size == "2-3Y" %}selected{% endif %}>2-3Y</option>
+        <!-- Add more sizes as needed -->
+    </select>
+
+    <select name="category">
+        <option value="">Any Category</option>
+        <option value="tops" {% if category == "tops" %}selected{% endif %}>Tops</option>
+        <option value="bottoms" {% if category == "bottoms" %}selected{% endif %}>Bottoms</option>
+        <option value="shoes" {% if category == "shoes" %}selected{% endif %}>Shoes</option>
+        <option value="outerwear" {% if category == "outerwear" %}selected{% endif %}>Outerwear</option>
+        <option value="accessories" {% if category == "accessories" %}selected{% endif %}>Accessories</option>
+    </select>
+
+    <button type="submit">Filter</button>
+    </form>
+
+    {% if query or size or category %}
+    <p>Filters:
+        {% if query %}Search: "{{ query }}" {% endif %}
+        {% if size %} | Size: {{ size }} {% endif %}
+        {% if category %} | Category: {{ category }} {% endif %}
+        <a href="{% url 'home' %}">Clear</a>
+    </p>
+    {% endif %}
+
 
     <h1>Available Items</h1>
     {% for item in items %}
@@ -24,5 +61,10 @@
     {% empty %}
         <p>No items available.</p>
     {% endfor %}
+    <form action="{% url 'add_to_cart' item.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">Add to Cart</button>
+    </form>
+
 </body>
 </html>
